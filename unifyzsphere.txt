@@ -1,0 +1,142 @@
+
+[varset,index,0]
+[varset,rayon,0.5]
+[varset,storedx,0]
+[varset,storedy,0]
+[varset,storedz,0]
+[varset,storedr,0]
+[varset,storedt,0]// twist
+[varset,compteur zsphere,0]
+
+//[ZSphereEdit,ZSpheres editing commands,Store undo? (0=Skip Undo, 1=Store undo)]
+//[ZSphereGet,Property: 0=ZSpheres count,1=xPos,2=yPos,3=zPos,4=radius,5=color,6=mask,7=ParentIndex(-1=none),8=LastClickedIndex(-1=none),9=TimeStamp;10=ChildsCount,11=ChildIndex (2nd index),12=TimeStampCount,13=TimeStampIndex,14=flags,15=Twist Angle,16=Membrane,17=X Re,Optional ZSphere index (0 based),Optional 2nd index (0 based)]
+//[ZSphereSet,Property: 0=unused, 1=xPos,2=yPos,3=zPos,4=radius,5=color,6=mask,7=ParentIndex,8=unused,9=TimeStamp,10=unused,11=unused,12=unused,13=unused,14=flags,15=Twist Angle,16=Membrane,17=X Res,18=Y Res,19=Z Res,20=XYZ Res,21=UserValue,ZSphere index (0 based),New property value]
+
+// BOUTON MOVE
+[IButton," Move ","move",
+[IPress,Transform:Move]
+,,50,,"assets/move.jpg",50]
+//BOUTON ROTATE
+[IButton," rotate ","rotate",
+[IPress,Transform:Rotate]
+,,50,,"assets/rotate.jpg",50]
+//BOUTON SCALE
+[IButton," scale ","scale",
+[IPress,Transform:Scale]
+,,50,,"assets/scale.jpg",50]
+//BOUTON EDIT
+[penmove,50]
+[IButton," edit ","edit",
+[IPress,Transform:Draw Pointer]
+,,50,,"assets/edit.jpg",50]
+[pd][pd]
+[fontsetsizesmall] Changer l'attribut Size de toutes les Zsphere ...
+[pd]
+// TOUTES LES ZSPHERE
+[IButton,"Toutes les Zsphere","Changer l'attribut size de toutes les Zsphere ",
+[If,[ZSphereEdit,,],[Note,"Ne fonctionne que sur les zphere !! ",0][exit]]
+[varset,total,[ZSphereGet,0]]
+[Loop,total,
+[varset,rayon,[val,[IGet,ZScript:rayon]]]
+[ZSphereEdit,[ZSphereSet,4,[val,index],[val,rayon]] ]
+[varset,index,index+1]
+,0]
+//[Notebar,[StrMerge," total ", total," index ",index," r ", rayon] ]
+[varset,index,0]
+,,150]  
+ 
+// SLIDER RAYON général rayon
+[ISlider,"rayon",0.5,0.1,0.01,1,"rayon unik",
+,,250]
+[pd][pd][pd][pd][pd][pd]
+[fontsetsizesmall]  changer attributs size de la zsphere active ( Passer en mode move pour choisir la zsphere)
+[pd]
+[IButton,"Zsphere Active","Changer l'attribut size de la Zsphere Active",
+
+	[If,[ZSphereEdit,,],[Note,"Ne fonctionne que sur les zphere !! ",0][exit]]
+	[If,[ZSphereGet,8]=-1,[Note,"Activer une Zsphere!! ",0][exit]]
+
+[varset,sel,[ZSphereGet,8]]
+[varset,sliderValue,[IGet,ZScript:selectedZsphere]]
+[ZSphereEdit,[ZSphereSet,4,sel,sliderValue ]]
+//[Note,[StrMerge," sel ",sel," value ",sliderValue]]
+,,150]  
+// SLIDER RAYON actif selectedzsphere
+[ISlider,"selectedZsphere",0.5,0.1,0.01,1,"rayon unik",
+,,250]
+[pd][pd][pd][pd][pd][pd]
+// BOUTON COPY
+[fontsetsizesmall]  Copier/Coller attributs de la zsphere active ( Passer en mode move pour choisir choisir la zsphere)
+[IButton," COPY ","copier x y z et rayon de la zsphere sélectionnée",
+	[If,[ZSphereEdit,,],[Note,"Ne fonctionne que sur les zphere !! ",0][exit]]
+	[If,[ZSphereGet,8]=-1,[Note,"Activer une Zsphere!! ",0][exit]]
+[varset,sel,[ZSphereGet,8]]
+//[Note, [StrMerge," actif = ", sel]]
+[varset,storedx,[ZSphereGet,1,sel]]
+[varset,storedy,[ZSphereGet,2,sel]]
+[varset,storedz,[ZSphereGet,3,sel]]
+[varset,storedr,[ZSphereGet,4,sel]]
+[varset,storedc,[ZSphereGet,5,sel]]// color
+[varset,storedm,[ZSphereGet,6,sel]]// mask
+[varset,storedp,[ZSphereGet,7,sel]]// parent index
+[varset,storedt,[ZSphereGet,15,sel]]// twist
+
+[NoteBar, [StrMerge,"Actif ",sel," x ",storedx," y ",storedy ," z ",storedz , " r ",storedr," twist ",storedt]]
+[ISet,ZScript:rayon,storedr]
+[ISet,ZScript:selectedZsphere,storedr]
+//[Note, [StrMerge,"indexclic ",sel," x ",storedx," y ",storedy ," z ",storedz , " r ",storedr]]
+,,50,,,50]
+[PenMove,,12]
+
+//BOUTON PASTE X
+[IButton,"paste x","coller la position x",
+
+	[If,[ZSphereEdit,,],[Note,"Ne fonctionne que sur les zphere !! ",0][exit]]
+	[If,[ZSphereGet,8]=-1,[Note,"Activer une Zsphere!! ",0][exit]]
+
+[varset,sel,[ZSphereGet,8]]
+//[Note, [StrMerge," storedx ",storedx," ", sel," ",sel]]
+[ZSphereEdit,[ZSphereSet,1,sel,storedx ]]
+,,100]
+
+// BOUTON PASTE Y
+[IButton,"paste y","coller la position  y",
+
+[If,[ZSphereEdit,,],[Note,"Ne fonctionne que sur les zphere !! ",0][exit]]
+[If,[ZSphereGet,8]=-1,[Note,"Activer une Zsphere!! ",0][exit]]
+
+[varset,sel,[ZSphereGet,8]]
+//[Note, [StrMerge," storedy ",storedy," ", sel," ",sel]]
+
+[ZSphereEdit,[ZSphereSet,2,sel,storedy ]]
+,,100]
+
+// BOUTON PASTE Z
+[IButton,"paste z","coller la position  z",
+	[If,[ZSphereEdit,,],[Note,"Ne fonctionne que sur les zphere !! ",0][exit]]
+	[If,[ZSphereGet,8]=-1,[Note,"Activer une Zsphere!! ",0][exit]]
+[varset,sel,[ZSphereGet,8]]
+
+//[Note, [StrMerge," storedz ",storedz," ", sel," ",sel]]
+[ZSphereEdit,[ZSphereSet,3,sel,storedz ]]
+,,100]
+
+// BOUTON PASTE R
+[IButton,"paste r","coller le rayon",
+	[If,[ZSphereEdit,,],[Note,"Ne fonctionne que sur les zphere !! ",0][exit]]
+	[If,[ZSphereGet,8]=-1,[Note,"Activer une Zsphere!! ",0][exit]]
+[varset,sel,[ZSphereGet,8]]
+[ZSphereEdit,[ZSphereSet,4,sel,storedr ]]
+,,100]
+
+[pd][pd][pd][pd][pd][pd]
+[IButton,"mise a zero","coller le rayon",
+	[If,[ZSphereEdit,,],[Note,"Ne fonctionne que sur les zphere !! ",0][exit]]
+	[If,[ZSphereGet,8]=-1,[Note,"Activer une Zsphere!! ",0][exit]]
+[varset,sel,[ZSphereGet,8]]
+[ZSphereEdit,[ZSphereSet,1,sel,0 ]]
+[ZSphereEdit,[ZSphereSet,2,sel,0 ]]
+[ZSphereEdit,[ZSphereSet,3,sel,0]]
+,,100]
+
+[fontsetsizesmall]  asckii 2012 
