@@ -1,4 +1,4 @@
-// modification pour teste
+// script to create zsphere of same size
 [varset,index,0]
 [varset,rayon,0.5]
 [varset,storedx,0]
@@ -45,7 +45,7 @@
 [varset,index,0]
 ,,150]  
  
-// SLIDER RAYON général rayon
+// SLIDER RAYON gï¿½nï¿½ral rayon
 [ISlider,"rayon",0.5,0.1,0.01,1,"rayon unik",
 ,,250]
 [pd][pd][pd][pd][pd][pd]
@@ -67,7 +67,7 @@
 [pd][pd][pd][pd][pd][pd]
 // BOUTON COPY
 [fontsetsizesmall]  Copier/Coller attributs de la zsphere active ( Passer en mode move pour choisir choisir la zsphere)
-[IButton," COPY ","copier x y z et rayon de la zsphere sélectionnée",
+[IButton," COPY ","copier x y z et rayon de la zsphere sï¿½lectionnï¿½e",
 	[If,[ZSphereEdit,,],[Note,"Ne fonctionne que sur les zphere !! ",0][exit]]
 	[If,[ZSphereGet,8]=-1,[Note,"Activer une Zsphere!! ",0][exit]]
 [varset,sel,[ZSphereGet,8]]
