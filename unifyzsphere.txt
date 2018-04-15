@@ -1,4 +1,4 @@
-// script to create zsphere of same size
+// script to create zsphere of same size --bruno
 [varset,index,0]
 [varset,rayon,0.5]
 [varset,storedx,0]
